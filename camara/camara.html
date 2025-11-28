@@ -11,10 +11,40 @@
     <script src="libraries/p5.min.js"></script>
     <script src="libraries/p5.sound.min.js"></script>
     <script src="https://unpkg.com/ml5@1/dist/ml5.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   </head>
 
   <body>
-    <script src="sketch.js"></script>
-  </body>
+    <script src="sketch.js"> </script>
+    <script>
+const supabasePublicClient =supabase.createClient('https://zkmmcyqshluvkuhtlvpu.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprbW1jeXFzaGx1dmt1aHRsdnB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE4OTg2ODksImV4cCI6MjA3NzQ3NDY4OX0.vQ_SrJp69cjVVo_u0SKI6l0pifl8uHdhVfbjG2QKIDg',
+            {
+                db:{schema:"public"}
+            }
+        );
+
+async function uploadFile(file) {
+    const {data,error} = await supabasePublicClient.storage.from('fotos').upload(`foto${Date.now()}.png`,file,{contentType:"image/png"});
+    if (error){
+        console.error('Error uploading image:',error.message)
+    } else {
+        console.log("Image uploaded successfully",data)
+    }
+}
+uploadFile(saveCanvas);
+
+async function uploadStaticImage(foto) {
+    const response = await fetch (saveCanvas);
+    const blob = await response.blob();
+            canvas.toBlob(saveCanvas)
+        
+    uploadFile(blob);}
+
+//canvas.toBlob(capturedImage, "image/png", 0.9)
+uploadStaticImage(saveCanvas);
+
+
+    </script>
+    </body>
 </html>
